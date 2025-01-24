@@ -16,27 +16,42 @@ go get github.com/liushuangls/streamtagparser
 package main
 
 import (
+	"fmt"
+
 	"github.com/liushuangls/streamtagparser"
 )
 
-// TagParser Non-concurrency safe, a TagParser can only be used for one stream
-parser := streamtagparser.NewTagParser("Artifact")
+func main() {
+	// TagParser Non-concurrency safe, a TagParser can only be used for one stream
+	parser := streamtagparser.NewTagParser("Artifact")
 
-mockStream := []string{
-	"hello", "world <A", "rtifact", ` "id"=1>`,
-	"local a", "=1", "</Ar", "tifact>end"
-}
-
-for _, data := range mockStream {
-	tagStrams := parser.Parse(data)
-	for _, tagStram := range tagStrams {
-		fmt.Println(tagStram)
+	mockStream := []string{
+		"hello", "world <A", "rtifact", ` "id"=1>`,
+		"local a", "=1", "</Ar", "tifact>end",
 	}
-}
 
-// Sometimes the streaming data returned by the LLM may be incomplete, so finishing touches are needed
-tagStreams := parser.ParseDone()
-for _, tagStram := range tagStrams {
-	fmt.Println(tagStram)
+	for _, data := range mockStream {
+		tagStreams := parser.Parse(data)
+		for _, tagStream := range tagStreams {
+			fmt.Printf("%#v\n", tagStream)
+		}
+	}
+
+	// Output:
+	/*
+		&streamtagparser.TagStreamData{Type:"text", Text:"hello", TagName:"", Attrs:[]streamtagparser.TagAttr(nil), Content:""}
+		&streamtagparser.TagStreamData{Type:"text", Text:"world ", TagName:"", Attrs:[]streamtagparser.TagAttr(nil), Content:""}
+		&streamtagparser.TagStreamData{Type:"start", Text:"", TagName:"Artifact", Attrs:[]streamtagparser.TagAttr{streamtagparser.TagAttr{Name:"id", Value:"1"}}, Content:""}
+		&streamtagparser.TagStreamData{Type:"content", Text:"", TagName:"Artifact", Attrs:[]streamtagparser.TagAttr(nil), Content:"local a"}
+		&streamtagparser.TagStreamData{Type:"content", Text:"", TagName:"Artifact", Attrs:[]streamtagparser.TagAttr(nil), Content:"=1"}
+		&streamtagparser.TagStreamData{Type:"end", Text:"", TagName:"Artifact", Attrs:[]streamtagparser.TagAttr{streamtagparser.TagAttr{Name:"id", Value:"1"}}, Content:"local a=1"}
+		&streamtagparser.TagStreamData{Type:"text", Text:"end", TagName:"", Attrs:[]streamtagparser.TagAttr(nil), Content:""}
+	*/
+
+	// Sometimes the streaming data returned by the LLM may be incomplete, so finishing touches are needed
+	tagStreams := parser.ParseDone()
+	for _, tagStream := range tagStreams {
+		fmt.Printf("%#v\n", tagStream)
+	}
 }
 ```
