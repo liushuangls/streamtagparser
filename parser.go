@@ -194,7 +194,14 @@ func (p *TagParser) parseRune(r rune) (tags []*TagStreamData) {
 				p.tagEndBuffer.WriteRune(r)
 			}
 			if p.currentTagParseEnd() {
-				tags = append(tags, NewEndTagStreamData(p.currentTagName, p.parseAttr(), p.tagContentBuffer.String()))
+				tags = append(
+					tags,
+					NewEndTagStreamData(
+						p.currentTagName,
+						p.parseAttr(),
+						p.tagContentBuffer.String(),
+					),
+				)
 				p.initStatus()
 				return
 			}

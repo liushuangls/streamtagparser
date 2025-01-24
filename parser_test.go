@@ -40,7 +40,11 @@ func TestTagParser(t *testing.T) {
 				{
 					input: ` "id"=1>`,
 					expectedTags: []*TagStreamData{
-						{Type: TagStreamTypeStart, TagName: "Artifact", Attrs: []TagAttr{{Name: "id", Value: "1"}}},
+						{
+							Type:    TagStreamTypeStart,
+							TagName: "Artifact",
+							Attrs:   []TagAttr{{Name: "id", Value: "1"}},
+						},
 					},
 				},
 				{
@@ -83,7 +87,11 @@ func TestTagParser(t *testing.T) {
 					input: `hello <Artifact "id"="123">worl`,
 					expectedTags: []*TagStreamData{
 						{Type: TagStreamTypeText, Text: "hello "},
-						{Type: TagStreamTypeStart, TagName: "Artifact", Attrs: []TagAttr{{Name: "id", Value: "123"}}},
+						{
+							Type:    TagStreamTypeStart,
+							TagName: "Artifact",
+							Attrs:   []TagAttr{{Name: "id", Value: "123"}},
+						},
 						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "worl"},
 					},
 				},
@@ -91,7 +99,12 @@ func TestTagParser(t *testing.T) {
 					input: `d</Artifact>!`,
 					expectedTags: []*TagStreamData{
 						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "d"},
-						{Type: TagStreamTypeEnd, TagName: "Artifact", Attrs: []TagAttr{{Name: "id", Value: "123"}}, Content: "world"},
+						{
+							Type:    TagStreamTypeEnd,
+							TagName: "Artifact",
+							Attrs:   []TagAttr{{Name: "id", Value: "123"}},
+							Content: "world",
+						},
 						{Type: TagStreamTypeText, Text: "!"},
 					},
 				},
@@ -123,7 +136,11 @@ func TestTagParser(t *testing.T) {
 					input: `333 <Artifact "name"="wu">444</Artif`,
 					expectedTags: []*TagStreamData{
 						{Type: TagStreamTypeText, Text: "333 "},
-						{Type: TagStreamTypeStart, TagName: "Artifact", Attrs: []TagAttr{{Name: "name", Value: "wu"}}},
+						{
+							Type:    TagStreamTypeStart,
+							TagName: "Artifact",
+							Attrs:   []TagAttr{{Name: "name", Value: "wu"}},
+						},
 						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "444"},
 					},
 				},
@@ -137,7 +154,12 @@ func TestTagParser(t *testing.T) {
 					input: "321</Artifact>123",
 					expectedTags: []*TagStreamData{
 						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "321"},
-						{Type: TagStreamTypeEnd, TagName: "Artifact", Attrs: []TagAttr{{Name: "name", Value: "wu"}}, Content: "444</Artif>555321"},
+						{
+							Type:    TagStreamTypeEnd,
+							TagName: "Artifact",
+							Attrs:   []TagAttr{{Name: "name", Value: "wu"}},
+							Content: "444</Artif>555321",
+						},
 						{Type: TagStreamTypeText, Text: "123"},
 					},
 				},
@@ -153,12 +175,22 @@ func TestTagParser(t *testing.T) {
 					input: `hello <Artifact "id"="1" name="a">world</Artifact> !`,
 					expectedTags: []*TagStreamData{
 						{Type: TagStreamTypeText, Text: "hello "},
-						{Type: TagStreamTypeStart, TagName: "Artifact", Attrs: []TagAttr{{Name: "id", Value: "1"}, {Name: "name", Value: "a"}}},
+						{
+							Type:    TagStreamTypeStart,
+							TagName: "Artifact",
+							Attrs: []TagAttr{
+								{Name: "id", Value: "1"},
+								{Name: "name", Value: "a"},
+							},
+						},
 						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "world"},
 						{
 							Type:    TagStreamTypeEnd,
 							TagName: "Artifact",
-							Attrs:   []TagAttr{{Name: "id", Value: "1"}, {Name: "name", Value: "a"}},
+							Attrs: []TagAttr{
+								{Name: "id", Value: "1"},
+								{Name: "name", Value: "a"},
+							},
 							Content: "world",
 						},
 						{Type: TagStreamTypeText, Text: " !"},
@@ -182,7 +214,11 @@ func TestTagParser(t *testing.T) {
 				{
 					input: "<Arti>hello</Arti>",
 					expectedTags: []*TagStreamData{
-						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "<Arti>hello</Arti>"},
+						{
+							Type:    TagStreamTypeContent,
+							TagName: "Artifact",
+							Content: "<Arti>hello</Arti>",
+						},
 					},
 				},
 			},
@@ -236,8 +272,16 @@ func TestTagParser(t *testing.T) {
 				{
 					input: "<Artifact>hello</Artifact>",
 					expectedTags: []*TagStreamData{
-						{Type: TagStreamTypeContent, TagName: "Artifact", Content: "<Artifact>hello"},
-						{Type: TagStreamTypeEnd, TagName: "Artifact", Content: "hello<Artifact>hello"},
+						{
+							Type:    TagStreamTypeContent,
+							TagName: "Artifact",
+							Content: "<Artifact>hello",
+						},
+						{
+							Type:    TagStreamTypeEnd,
+							TagName: "Artifact",
+							Content: "hello<Artifact>hello",
+						},
 					},
 				},
 				{
@@ -270,7 +314,10 @@ func TestTagParser(t *testing.T) {
 				{
 					input: longText,
 					expectedTags: []*TagStreamData{
-						{Type: TagStreamTypeText, Text: fmt.Sprintf(`<Artifact "id"="1" "name"="a" %s`, longText)},
+						{
+							Type: TagStreamTypeText,
+							Text: fmt.Sprintf(`<Artifact "id"="1" "name"="a" %s`, longText),
+						},
 					},
 				},
 			},
@@ -314,7 +361,14 @@ func TestTagParser(t *testing.T) {
 					{
 						input: ` "id"="1" name="a" 1 >`,
 						expectedTags: []*TagStreamData{
-							{Type: TagStreamTypeStart, TagName: "Artifact", Attrs: []TagAttr{{Name: "id", Value: "1"}, {Name: "name", Value: "a"}}},
+							{
+								Type:    TagStreamTypeStart,
+								TagName: "Artifact",
+								Attrs: []TagAttr{
+									{Name: "id", Value: "1"},
+									{Name: "name", Value: "a"},
+								},
+							},
 						},
 					},
 					{
@@ -383,7 +437,12 @@ func testParserTest(t *testing.T, testData parserTest, tags ...string) {
 	for _, item := range testData.items {
 		tags := parser.Parse(item.input)
 		if len(item.expectedTags) != len(tags) {
-			t.Fatalf(" input: %s, expected tags length: %d, got: %d", item.input, len(item.expectedTags), len(tags))
+			t.Fatalf(
+				" input: %s, expected tags length: %d, got: %d",
+				item.input,
+				len(item.expectedTags),
+				len(tags),
+			)
 		}
 		for i, tag := range tags {
 			tagEqual(t, item.expectedTags[i], tag)
