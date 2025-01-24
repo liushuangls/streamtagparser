@@ -1,6 +1,8 @@
 # streamtagparser
 Parse the tag data in the stream data returned by the LLM, such as the Artifact
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/liushuangls/streamtagparser/v2.svg)](https://pkg.go.dev/github.com/liushuangls/streamtagparser)
+[![Go Report Card](https://goreportcard.com/badge/github.com/liushuangls/streamtagparser)](https://goreportcard.com/report/github.com/liushuangls/streamtagparser)
 [![codecov](https://codecov.io/gh/liushuangls/streamtagparser/graph/badge.svg?token=U7TovXlix3)](https://codecov.io/gh/liushuangls/streamtagparser)
 [![Sanity check](https://github.com/liushuangls/streamtagparser/actions/workflows/pr.yml/badge.svg)](https://github.com/liushuangls/streamtagparser/actions/workflows/pr.yml)
 
