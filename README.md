@@ -1,6 +1,8 @@
 # streamtagparser
 Parse the tag data in the stream data returned by the LLM, such as the Artifact
 
+[![codecov](https://codecov.io/gh/liushuangls/streamtagparser/graph/badge.svg?token=U7TovXlix3)](https://codecov.io/gh/liushuangls/streamtagparser)
+
 ## Installation
 ```bash
 go get github.com/liushuangls/streamtagparser
